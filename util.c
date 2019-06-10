@@ -78,3 +78,14 @@ ssize_t find_string_start(const char *buf, const char *substr, size_t buf_size, 
         return buffoff;
     return -1;
 }
+
+ssize_t find_last_crlf(const char *buf, size_t buf_size) {
+    // start at the end of the string
+    for (size_t i = buf_size - 2; i > 0; i--) {
+        if (buf[i] == '\r' && buf[i+1] == '\n')
+            return i;
+    }
+    return -1;
+}
+
+

@@ -12,6 +12,8 @@
 #include <fcntl.h>
 
 ssize_t find_string_start(const char *buf, const char *substr, size_t buf_size, size_t substr_size);
+// return index of last '\r\n' (returns idx of the '\r')
+ssize_t find_last_crlf(const char *buf, size_t buf_size);
 
 int try_open(const char *portname);
 int try_close(int fd);
