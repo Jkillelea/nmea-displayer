@@ -9,6 +9,9 @@ all: main
 main: main.o util.o constants.o $(LIBNMEA)
 	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
+$(LIBNMEA):
+	make -C libnmea
+
 main.o: main.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
@@ -20,3 +23,7 @@ constants.o: constants.c
 
 clean:
 	rm -f *.o
+
+cleanall:
+	$(MAKE) clean
+	cd libnmea && $(MAKE) clean && cd ..
