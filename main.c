@@ -4,7 +4,7 @@
 #include "constants.h"
 #include "util.h"
 
-#define BUFF_SIZE 100
+#define BUFF_SIZE 512
 
 void trace(const char *str, int str_size) {
     printf("Trace: ");
@@ -61,19 +61,9 @@ int main(int argc, const char *argv[]) {
             }
         }
 
-        // start of the first message
-        ssize_t start_idx = find_string_start(buff, "$", BUFF_SIZE, strlen("$"));
-        // // end of the first message
-        // ssize_t first_msg_end = find_string_start(buff + start_idx, "\r\n", BUFF_SIZE - start_idx, 2);
-        // buff[first_msg_end+2] = 0;
+        printf("%s\n", buff);
 
-        // end of the last message
-        ssize_t last_line_end = find_last_crlf(buff, BUFF_SIZE);
-        buff[last_line_end] = 0;
-
-        printf("%s\n", buff + start_idx);
-
-        int nparsed = nmea_parse(&parser, buff + start_idx, BUFF_SIZE - last_line_end, &info);
+        int nparsed = nmea_parse(&parser, buff, BUFF_SIZE, &info);
         printf("parsed %d messages\n", nparsed);
 
         nmea_info2GPGGA(&info, &gpgga);
@@ -82,6 +72,30 @@ int main(int argc, const char *argv[]) {
         nmea_info2GPRMC(&info, &gprmc);
         nmea_info2GPVTG(&info, &gpvtg);
         nmea_info2pos(&info, &pos);
+
+        // printf("info {\n");
+        // printf("    mask = %d,\n", info.smask);
+        // printf("    utc = {\n");
+        // printf("        year = %d,\n", info.utc.year);
+        // printf("        mon  = %d,\n", info.utc.mon);
+        // printf("        day  = %d,\n", info.utc.day);
+        // printf("        hour = %d,\n", info.utc.hour);
+        // printf("        min  = %d,\n", info.utc.min);
+        // printf("        sec  = %d,\n", info.utc.sec);
+        // printf("        hsec = %d,\n", info.utc.hsec);
+        // printf("    }\n");
+        // printf("    sig         = %d,\n", info.sig);
+        // printf("    fix         = %d,\n", info.fix);
+        // printf("    PDOP        = %lf,\n", info.PDOP);
+        // printf("    HDOP        = %lf,\n", info.HDOP);
+        // printf("    VDOP        = %lf,\n", info.VDOP);
+        // printf("    lat         = %lf,\n", decimal_minutes2decimal_decimal(info.lat));
+        // printf("    lon         = %lf,\n", decimal_minutes2decimal_decimal(info.lon));
+        // printf("    elv         = %lf,\n", info.elv);
+        // printf("    speed       = %lf,\n", info.speed);
+        // printf("    direction   = %lf,\n", info.direction);
+        // printf("    declination = %lf,\n", info.declination);
+        // printf("};\n");
 
         printf("GPGGA {\n");
         printf("    utc = {\n");
@@ -93,8 +107,8 @@ int main(int argc, const char *argv[]) {
         printf("        sec  = %d,\n", gpgga.utc.sec);
         printf("        hsec = %d,\n", gpgga.utc.hsec);
         printf("    },\n");
-        printf("    lat      = %lf %s,\n", gpgga.lat, &gpgga.ns);
-        printf("    lon      = %lf %s,\n", gpgga.lon, &gpgga.ew);
+        printf("    lat      = %lf %s,\n", decimal_minutes2decimal_decimal(gpgga.lat), &gpgga.ns);
+        printf("    lon      = %lf %s,\n", decimal_minutes2decimal_decimal(gpgga.lon), &gpgga.ew);
         printf("    sig      = %d,\n",     gpgga.sig);
         printf("    satinuse = %d,\n",     gpgga.satinuse);
         printf("    HDOP     = %lf,\n",    gpgga.HDOP);
