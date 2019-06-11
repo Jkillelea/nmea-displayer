@@ -8,3 +8,4 @@ const char *portname = "/dev/ttyUSB0";
 
 const int SPEED = B9600;
 const int PARITY = 0;
+
