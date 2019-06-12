@@ -53,7 +53,7 @@ int main(int argc, const char *argv[]) {
             recieved_bytes += nbytes_read;
 
             if (nbytes_read == 0) { // failed to read anything?
-                perror("Failed to read from fd.");
+                fprintf(stderr, "Failed to read from fd (0 bytes).");
                 try_close(fd);
                 fd = try_open(portname);
                 if (fd < 0) {
@@ -77,6 +77,7 @@ int main(int argc, const char *argv[]) {
 
         print_info(&info);
 
+        // check which messages were recieved
         if (info.smask & GPGGA) {
             puts("got a GPGGA msg");
             print_gpgga(&gpgga);
