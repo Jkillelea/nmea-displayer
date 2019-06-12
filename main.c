@@ -87,6 +87,7 @@ int main(int argc, const char *argv[]) {
         }
         if (info.smask & GPGSV) {
             puts("got a GPGSV msg");
+            print_gpgsv(&gpgsv);
         }
         if (info.smask & GPRMC) {
             puts("got a GPRMC msg");
