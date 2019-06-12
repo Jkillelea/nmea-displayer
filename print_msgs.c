@@ -59,12 +59,30 @@ void print_gpgsa(nmeaGPGSA *gpgsa) {
     printf("    fix_type = %d,\n", gpgsa->fix_type);
     int i = 0;
     while (gpgsa->sat_prn[i]) {
-        printf("    sat_prn = %d,\n", *(gpgsa->sat_prn));
+        printf("    sat_prn = %d,\n", gpgsa->sat_prn[i]);
         i++;
     }
     printf("    PDOP = %lf,\n", gpgsa->PDOP);
     printf("    HDOP = %lf,\n", gpgsa->HDOP);
     printf("    VDOP = %lf,\n", gpgsa->VDOP);
+    printf("};\n");
+}
+
+void print_gpgsv(nmeaGPGSV *gpgsv) {
+    printf("GPGSV {\n");
+    printf("    pack_count = %d\n", gpgsv->pack_count);
+    printf("    pack_index = %d\n", gpgsv->pack_index);
+    printf("    sat_count  = %d\n", gpgsv->sat_count);
+    // for (int i = 0; i < gpgsv->sat_count; i++) {
+    //     nmeaSATELLITE sat = gpgsv->sat_data[i];
+    //     printf("    satellite = {\n");
+    //     printf("        id      = %d\n", sat.id);
+    //     printf("        in_use  = %d\n", sat.in_use);
+    //     printf("        elv     = %d\n", sat.elv);
+    //     printf("        azimuth = %d\n", sat.azimuth);
+    //     printf("        sig     = %d\n", sat.sig);
+    //     printf("    }\n");
+    // }
     printf("};\n");
 }
 
@@ -76,3 +94,4 @@ void print_gpvtg(nmeaGPVTG *gpvtg) {
     printf("    spk = %lf %s\n", gpvtg->spk, &gpvtg->spk_k);
     printf("};\n");
 }
+
