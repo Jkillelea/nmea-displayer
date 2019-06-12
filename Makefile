@@ -6,7 +6,7 @@ LIBNMEA = libnmea/lib/libnmea.a
 
 all: main
 
-main: main.o util.o constants.o $(LIBNMEA)
+main: main.o util.o constants.o print_msgs.o $(LIBNMEA)
 	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
 $(LIBNMEA):
@@ -20,6 +20,9 @@ util.o: util.c
 
 constants.o: constants.c
 	$(CC) -c $^ -o $@
+
+print_msgs.o: print_msgs.c
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 clean:
 	rm -f *.o

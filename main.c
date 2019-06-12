@@ -2,6 +2,7 @@
 #include <nmea/nmea.h>
 
 #include "constants.h"
+#include "print_msgs.h"
 #include "util.h"
 
 #define BUFF_SIZE 512
@@ -11,6 +12,7 @@ void trace(const char *str, int str_size) {
     printf("%s\n", str);
     printf("\n");
 }
+
 void error(const char *str, int str_size) {
     printf("Error: ");
     printf("%s\n", str);
@@ -73,72 +75,28 @@ int main(int argc, const char *argv[]) {
         nmea_info2GPVTG(&info, &gpvtg);
         nmea_info2pos(&info, &pos);
 
-        // printf("info {\n");
-        // printf("    mask = %d,\n", info.smask);
-        // printf("    utc = {\n");
-        // printf("        year = %d,\n", info.utc.year);
-        // printf("        mon  = %d,\n", info.utc.mon);
-        // printf("        day  = %d,\n", info.utc.day);
-        // printf("        hour = %d,\n", info.utc.hour);
-        // printf("        min  = %d,\n", info.utc.min);
-        // printf("        sec  = %d,\n", info.utc.sec);
-        // printf("        hsec = %d,\n", info.utc.hsec);
-        // printf("    }\n");
-        // printf("    sig         = %d,\n", info.sig);
-        // printf("    fix         = %d,\n", info.fix);
-        // printf("    PDOP        = %lf,\n", info.PDOP);
-        // printf("    HDOP        = %lf,\n", info.HDOP);
-        // printf("    VDOP        = %lf,\n", info.VDOP);
-        // printf("    lat         = %lf,\n", decimal_minutes2decimal_decimal(info.lat));
-        // printf("    lon         = %lf,\n", decimal_minutes2decimal_decimal(info.lon));
-        // printf("    elv         = %lf,\n", info.elv);
-        // printf("    speed       = %lf,\n", info.speed);
-        // printf("    direction   = %lf,\n", info.direction);
-        // printf("    declination = %lf,\n", info.declination);
-        // printf("};\n");
+        print_info(&info);
 
-        printf("GPGGA {\n");
-        printf("    utc = {\n");
-        printf("        year = %d,\n", gpgga.utc.year);
-        printf("        mon  = %d,\n", gpgga.utc.mon);
-        printf("        day  = %d,\n", gpgga.utc.day);
-        printf("        hour = %d,\n", gpgga.utc.hour);
-        printf("        min  = %d,\n", gpgga.utc.min);
-        printf("        sec  = %d,\n", gpgga.utc.sec);
-        printf("        hsec = %d,\n", gpgga.utc.hsec);
-        printf("    },\n");
-        printf("    lat      = %lf %s,\n", decimal_minutes2decimal_decimal(gpgga.lat), &gpgga.ns);
-        printf("    lon      = %lf %s,\n", decimal_minutes2decimal_decimal(gpgga.lon), &gpgga.ew);
-        printf("    sig      = %d,\n",     gpgga.sig);
-        printf("    satinuse = %d,\n",     gpgga.satinuse);
-        printf("    HDOP     = %lf,\n",    gpgga.HDOP);
-        printf("    elv      = %lf %s,\n", gpgga.elv, &gpgga.elv_units);
-        printf("    diff     = %lf %s,\n", gpgga.diff, &gpgga.diff_units);
-        printf("    dgps_age = %lf,\n",    gpgga.dgps_age);
-        printf("    dgps_sid = %d,\n",     gpgga.dgps_sid);
-        printf("};\n");
-
-        printf("GPGSA {\n");
-        printf("    fix_mode = %s,\n", &gpgsa.fix_mode);
-        printf("    fix_type = %d,\n", gpgsa.fix_type);
-        int i = 0;
-        while (gpgsa.sat_prn[i]) {
-            printf("    sat_prn = %d,\n", *gpgsa.sat_prn);
-            i++;
+        if (info.smask & GPGGA) {
+            puts("got a GPGGA msg");
+            print_gpgga(&gpgga);
         }
-        printf("    PDOP = %lf,\n", gpgsa.PDOP);
-        printf("    HDOP = %lf,\n", gpgsa.HDOP);
-        printf("    VDOP = %lf,\n", gpgsa.VDOP);
-        printf("};\n");
-
-        printf("GPVTG {\n");
-        printf("    dir = %lf %s\n", gpvtg.dir, &gpvtg.dir_t);
-        printf("    dec = %lf %s\n", gpvtg.dec, &gpvtg.dec_m);
-        printf("    spn = %lf %s\n", gpvtg.spn, &gpvtg.spn_n);
-        printf("    spk = %lf %s\n", gpvtg.spk, &gpvtg.spk_k);
-        printf("};\n");
-
+        if (info.smask & GPGSA) {
+            puts("got a GPGSA msg");
+            print_gpgsa(&gpgsa);
+        }
+        if (info.smask & GPGSV) {
+            puts("got a GPGSV msg");
+        }
+        if (info.smask & GPRMC) {
+            puts("got a GPRMC msg");
+        }
+        if (info.smask & GPVTG) {
+            puts("got a GPVTG msg");
+            print_gpvtg(&gpvtg);
+        }
     }
+
     nmea_parser_destroy(&parser);
 
     return 0;
