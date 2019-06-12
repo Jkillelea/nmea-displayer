@@ -44,6 +44,16 @@ int try_open(const char *portname) {
     serialport.c_cflag &= ~CSTOPB;
     serialport.c_cflag &= ~CRTSCTS; // vs code doesn't find this one flag? still compiles.
 
+
+    // From the manpages. Sets it to raw mode. Otherwise linux can postprocess
+    // the \r\n into \n\n and the parser fails
+    serialport.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+                            | INLCR | IGNCR  | ICRNL  | IXON);
+    serialport.c_oflag &= ~OPOST;
+    serialport.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+    serialport.c_cflag &= ~(CSIZE | PARENB);
+    serialport.c_cflag |= CS8;
+
     if (tcsetattr(fd, TCSANOW, &serialport) != 0) {
         perror("tcsetattr failed");
         printf("error %d from tcsetattr", errno);
