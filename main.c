@@ -34,18 +34,19 @@ int main(int argc, const char *argv[]) {
     nmea_property()->error_func = &error;
 
     nmea_parser_init(&parser);
-    nmea_zero_INFO(&info);
-    nmea_zero_GPGGA(&gpgga);
-    nmea_zero_GPGSA(&gpgsa);
-    nmea_zero_GPGSV(&gpgsv);
-    nmea_zero_GPRMC(&gprmc);
-    nmea_zero_GPVTG(&gpvtg);
 
     int fd = try_open(portname);
     if (fd < 0)
         return 1;
 
     while (true) {
+        nmea_zero_INFO(&info);
+        nmea_zero_GPGGA(&gpgga);
+        nmea_zero_GPGSA(&gpgsa);
+        nmea_zero_GPGSV(&gpgsv);
+        nmea_zero_GPRMC(&gprmc);
+        nmea_zero_GPVTG(&gpvtg);
+
         // read until buffer is full
         size_t recieved_bytes = 0;
         while(recieved_bytes < BUFF_SIZE) {
