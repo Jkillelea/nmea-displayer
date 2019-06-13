@@ -57,11 +57,11 @@ void print_gpgsa(nmeaGPGSA *gpgsa) {
     printf("GPGSA {\n");
     printf("    fix_mode = %s,\n", &gpgsa->fix_mode);
     printf("    fix_type = %d,\n", gpgsa->fix_type);
-    int i = 0;
-    while (gpgsa->sat_prn[i]) {
-        printf("    sat_prn = %d,\n", gpgsa->sat_prn[i]);
-        i++;
-    }
+    // int i = 0;
+    // while (gpgsa->sat_prn[i]) {
+    //     printf("    sat_prn = %d,\n", gpgsa->sat_prn[i]);
+    //     i++;
+    // }
     printf("    PDOP = %lf,\n", gpgsa->PDOP);
     printf("    HDOP = %lf,\n", gpgsa->HDOP);
     printf("    VDOP = %lf,\n", gpgsa->VDOP);
