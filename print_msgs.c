@@ -95,3 +95,24 @@ void print_gpvtg(nmeaGPVTG *gpvtg) {
     printf("};\n");
 }
 
+void print_gprmc(nmeaGPRMC *gprmc) {
+    printf("GPRMC {\n");
+    printf("    utc = {\n");
+    printf("        year = %d,\n", gprmc->utc.year);
+    printf("        mon  = %d,\n", gprmc->utc.mon);
+    printf("        day  = %d,\n", gprmc->utc.day);
+    printf("        hour = %d,\n", gprmc->utc.hour);
+    printf("        min  = %d,\n", gprmc->utc.min);
+    printf("        sec  = %d,\n", gprmc->utc.sec);
+    printf("        hsec = %d,\n", gprmc->utc.hsec);
+    printf("    }\n");
+    printf("    status      = %s\n",    &gprmc->status);
+    printf("    lat         = %lf %s\n", gprmc->lat, &gprmc->ns);
+    printf("    lon         = %lf %s\n", gprmc->lat, &gprmc->ew);
+    printf("    speed       = %lf\n",    gprmc->speed);
+    printf("    direction   = %lf\n",    gprmc->direction);
+    printf("    declination = %lf %s\n", gprmc->declination, &gprmc->declin_ew);
+    printf("    mode        = %s\n",    &gprmc->mode);
+    printf("};\n");
+}
+
