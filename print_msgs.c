@@ -107,8 +107,8 @@ void print_gprmc(nmeaGPRMC *gprmc) {
     printf("        hsec = %d,\n", gprmc->utc.hsec);
     printf("    }\n");
     printf("    status      = %s\n",    &gprmc->status);
-    printf("    lat         = %lf %s\n", gprmc->lat, &gprmc->ns);
-    printf("    lon         = %lf %s\n", gprmc->lat, &gprmc->ew);
+    printf("    lat         = %lf %s\n", decimal_minutes2decimal_decimal(gprmc->lat), &gprmc->ns);
+    printf("    lon         = %lf %s\n", decimal_minutes2decimal_decimal(gprmc->lat), &gprmc->ew);
     printf("    speed       = %lf\n",    gprmc->speed);
     printf("    direction   = %lf\n",    gprmc->direction);
     printf("    declination = %lf %s\n", gprmc->declination, &gprmc->declin_ew);
