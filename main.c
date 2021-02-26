@@ -30,14 +30,18 @@ int main(int argc, const char *argv[]) {
     nmeaGPRMC  gprmc;
     nmeaGPVTG  gpvtg;
 
-    // nmea_property()->trace_func = &trace;
-    // nmea_property()->error_func = &error;
+    nmea_property()->trace_func = &trace;
+    nmea_property()->error_func = &error;
 
     nmea_parser_init(&parser);
 
-    int fd = try_open(portname);
-    if (fd < 0)
+    int fd = try_open(PORTNAME);
+    if (fd < 0) {
+        char buffer[256];
+        snprintf(buffer, sizeof(buffer), "open %s", PORTNAME);
+        perror(buffer);
         return 1;
+    }
 
     while (true) {
         nmea_zero_INFO(&info);
@@ -56,7 +60,7 @@ int main(int argc, const char *argv[]) {
             if (nbytes_read == 0) { // failed to read anything?
                 fprintf(stderr, "Failed to read from fd (0 bytes)\n");
                 try_close(fd);
-                fd = try_open(portname);
+                fd = try_open(PORTNAME);
                 if (fd < 0) {
                     perror("Failed to reopen fd:");
                     return 2;

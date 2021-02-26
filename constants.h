@@ -3,14 +3,13 @@
 
 #include <termios.h>
 
-extern const char *portname;
-extern const int SPEED;
-extern const int PARITY;
-
-// vscode doesn't find this one flag in bits/termios.h for some reason.
-#ifndef CRTSCTS
-#warning "this bit of code is for keeping VSCode happy and shouldn't compile!"
-#define CRTSCTS  020000000000
+#ifdef __arm__ // raspberry pi
+#define PORTNAME "/dev/serial0"
+#else // x86 with usb adaptor
+#define PORTNAME "/dev/ttyUSB0"
 #endif
+
+#define SPEED B9600
+#define PARITY 0
 
 #endif // _CONSTANTS_H_ 
